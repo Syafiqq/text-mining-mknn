@@ -1,4 +1,5 @@
 rootProject.name = 'mknn'
-include 'test1'
 include 'core'
+include 'test-case'
+include 'dummy-generator'
 
