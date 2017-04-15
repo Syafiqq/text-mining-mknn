@@ -1,4 +1,4 @@
-import case_0.clazz.Class1;
+import case_0.clazz.IntegerClass;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,13 +14,13 @@ public class ClassInstatiationTest
 {
     @Test public void it_success_create()
     {
-        @NotNull final Class1 cl1 = new Class1(1);
+        @NotNull final IntegerClass cl1 = new IntegerClass(1);
         Assert.assertNotNull(cl1);
     }
 
     @Test public void it_class_return_1()
     {
-        @NotNull final Class1 cl1 = new Class1(1);
+        @NotNull final IntegerClass cl1 = new IntegerClass(1);
         Assert.assertEquals(1, cl1.getClazz());
     }
 }
