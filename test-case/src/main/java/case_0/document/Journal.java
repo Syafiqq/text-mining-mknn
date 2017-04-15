@@ -1,7 +1,7 @@
 package case_0.document;
 
-import app.freelancer.syafiqq.text.classification.knn.core.document.Documents;
-import case_0.clazz.Class1;
+import app.freelancer.syafiqq.text.classification.knn.core.Documents;
+import case_0.clazz.IntegerClass;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,13 +13,13 @@ import org.jetbrains.annotations.Nullable;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-public class Journal extends Documents<Class1>
+public class Journal extends Documents<IntegerClass, BagOfWords>
 {
     @NotNull private String documents;
 
-    public Journal(@Nullable Class1 clazz, @NotNull String documents)
+    public Journal(@Nullable IntegerClass clazz, @NotNull BagOfWords bow, @NotNull String documents)
     {
-        super(clazz);
+        super(clazz, bow);
         this.documents = documents;
     }
 
