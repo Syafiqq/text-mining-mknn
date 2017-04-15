@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class ClassifiedDocuments extends Documents
 {
-    @NotNull private Class clazz;
+    @NotNull protected Class clazz;
 
     public ClassifiedDocuments(@NotNull Class clazz)
     {
