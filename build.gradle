@@ -1,0 +1,13 @@
+group 'app.freelancer.syafiqq.classification'
+version '1.0-SNAPSHOT'
+
+
+allprojects {
+    repositories {
+        jcenter()
+        maven {
+            url "https://repo1.maven.org/maven2"
+        }
+    }
+}
+
