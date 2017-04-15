@@ -3,6 +3,7 @@ package app.freelancer.syafiqq.text.classification.knn.core;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * This <mknn> created by : 
@@ -13,7 +14,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class TermContainer<T extends Term>
 {
-    private List<T> terms;
+    @NotNull protected List<T> terms;
 
     public TermContainer()
     {
@@ -29,7 +30,7 @@ public class TermContainer<T extends Term>
         return false;
     }
 
-    public List<T> getTerms()
+    @NotNull public List<T> getTerms()
     {
         return this.terms;
     }
