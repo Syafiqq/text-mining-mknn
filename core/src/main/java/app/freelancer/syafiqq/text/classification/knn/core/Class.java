@@ -1,5 +1,7 @@
 package app.freelancer.syafiqq.text.classification.knn.core;
 
+import org.jetbrains.annotations.NotNull;
+
 /*
  * This <mknn> created by : 
  * Name         : syafiq
@@ -7,6 +9,7 @@ package app.freelancer.syafiqq.text.classification.knn.core;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-public class Class
+public abstract class Class
 {
+    public abstract void collectTerms(@NotNull TermContainer terms);
 }
