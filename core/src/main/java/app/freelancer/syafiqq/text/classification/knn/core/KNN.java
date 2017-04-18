@@ -2,7 +2,6 @@ package app.freelancer.syafiqq.text.classification.knn.core;
 
 import java.util.LinkedList;
 import java.util.List;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,6 +49,16 @@ public class KNN
         }
     }
 
+    public void tokenizeDocument()
+    {
+        for(@NotNull final Documents document : this.documents)
+        {
+            document.preProcess();
+            document.tokenize();
+            document.collectTerms(this.terms, document.bagOfWords);
+        }
+    }
+
     @NotNull public List<Documents> getDocuments()
     {
         return this.documents;
@@ -65,7 +74,7 @@ public class KNN
         return this.terms;
     }
 
-    public void setTerms(@Nullable TermContainer terms)
+    public void setTerms(@NotNull TermContainer terms)
     {
         this.terms = terms;
     }
@@ -82,9 +91,10 @@ public class KNN
 
     @Override public String toString()
     {
-        return new ToStringBuilder(this)
-                .append("documents", documents)
-                .append("terms", terms)
-                .toString();
+        return "KNN{" +
+                "documents=" + documents +
+                ", classes=" + classes +
+                ", terms=" + terms +
+                '}';
     }
 }
