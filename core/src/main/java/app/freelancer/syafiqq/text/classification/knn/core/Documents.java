@@ -1,6 +1,5 @@
 package app.freelancer.syafiqq.text.classification.knn.core;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-public abstract class Documents<C extends Class, B extends BagOfWords>
+public abstract class Documents<C extends Class, B extends BagOfWords, T extends TermContainer>
 {
     @Nullable protected C clazz;
     @NotNull protected  B bagOfWords;
@@ -42,11 +41,17 @@ public abstract class Documents<C extends Class, B extends BagOfWords>
         this.bagOfWords = bagOfWords;
     }
 
+    public abstract void preProcess();
+
+    public abstract void tokenize();
+
+    public abstract void collectTerms(@Nullable T terms, @NotNull B bagOfWords);
+
     @Override public String toString()
     {
-        return new ToStringBuilder(this)
-                .append("clazz", clazz)
-                .append("bagOfWords", bagOfWords)
-                .toString();
+        return "Documents{" +
+                "clazz=" + clazz +
+                ", bagOfWords=" + bagOfWords +
+                '}';
     }
 }
