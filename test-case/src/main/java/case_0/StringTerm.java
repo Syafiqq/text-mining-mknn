@@ -1,6 +1,7 @@
 package case_0;
 
 import app.freelancer.syafiqq.text.classification.knn.core.Term;
+import java.util.Locale;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +18,7 @@ public class StringTerm extends Term
 
     public StringTerm(@NotNull String term)
     {
-        this.term = term;
+        this.term = term.toLowerCase(new Locale("id", "ID", "ID"));
     }
 
     @NotNull public String getTerm()
