@@ -1,6 +1,8 @@
 package case_0.document;
 
+import app.freelancer.syafiqq.text.classification.knn.core.BagOfWords;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /*
  * This <mknn> created by : 
@@ -9,16 +11,16 @@ import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-public class BagOfWords extends app.freelancer.syafiqq.text.classification.knn.core.BagOfWords
+public class BagOfWordsImpl extends BagOfWords
 {
     private Object2IntLinkedOpenHashMap<String> bag;
 
-    public BagOfWords()
+    public BagOfWordsImpl()
     {
         this.bag = new Object2IntLinkedOpenHashMap<>();
     }
 
-    public Integer increment(String term)
+    public int increment(String term)
     {
         return this.bag.addTo(term, 1);
     }
@@ -36,5 +38,12 @@ public class BagOfWords extends app.freelancer.syafiqq.text.classification.knn.c
     public boolean containsKey(String k)
     {
         return bag.containsKey(k);
+    }
+
+    @Override public String toString()
+    {
+        return new ToStringBuilder(this)
+                .append("bag", bag)
+                .toString();
     }
 }
