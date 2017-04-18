@@ -2,8 +2,8 @@ package case_0.clazz;
 
 import app.freelancer.syafiqq.text.classification.knn.core.Class;
 import app.freelancer.syafiqq.text.classification.knn.core.Term;
-import app.freelancer.syafiqq.text.classification.knn.core.TermContainer;
 import case_0.StringTerm;
+import case_0.StringTermContainer;
 import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -17,16 +17,16 @@ import org.jetbrains.annotations.NotNull;
  */
 
 
-@SuppressWarnings("unused") public class IntegerClass extends Class
+@SuppressWarnings("unused") public class IntegerClass extends Class<StringTermContainer>
 {
-    private          int                       clazz;
-    @NotNull private TermContainer<StringTerm> terms;
+    private          int                 clazz;
+    @NotNull private StringTermContainer terms;
 
 
     public IntegerClass(int clazz)
     {
         this.clazz = clazz;
-        this.terms = new TermContainer<>();
+        this.terms = new StringTermContainer();
     }
 
     public int getClazz()
@@ -44,12 +44,12 @@ import org.jetbrains.annotations.NotNull;
         this.terms.add(stringTerm);
     }
 
-    @NotNull public TermContainer<StringTerm> getTermContainer()
+    @NotNull public StringTermContainer getTermContainer()
     {
         return this.terms;
     }
 
-    @Override public void collectTerms(@NotNull TermContainer terms)
+    @Override public void collectTerms(@NotNull StringTermContainer terms)
     {
         @NotNull final List container = terms.getTerms();
         for(@NotNull final Term term : this.terms.getTerms())

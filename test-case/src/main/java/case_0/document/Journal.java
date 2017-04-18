@@ -1,8 +1,8 @@
 package case_0.document;
 
 import app.freelancer.syafiqq.text.classification.knn.core.Documents;
-import app.freelancer.syafiqq.text.classification.knn.core.TermContainer;
 import case_0.StringTerm;
+import case_0.StringTermContainer;
 import case_0.clazz.IntegerClass;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-public class Journal extends Documents<IntegerClass, BagOfWordsImpl, TermContainer<StringTerm>>
+public class Journal extends Documents<IntegerClass, BagOfWordsImpl, StringTermContainer>
 {
     @NotNull private String       documents;
     @NotNull private List<String> tokenizeDocuments;
@@ -55,7 +55,7 @@ public class Journal extends Documents<IntegerClass, BagOfWordsImpl, TermContain
         }
     }
 
-    @Override public void collectTerms(@Nullable TermContainer<StringTerm> terms, @NotNull BagOfWordsImpl bagOfWords)
+    @Override public void collectTerms(@Nullable StringTermContainer terms, @NotNull BagOfWordsImpl bagOfWords)
     {
         if(terms != null)
         {
