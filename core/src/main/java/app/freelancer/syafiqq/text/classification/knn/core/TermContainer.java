@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-@SuppressWarnings("WeakerAccess") public class TermContainer<T extends Term>
+@SuppressWarnings("WeakerAccess") public abstract class TermContainer<T extends Term>
 {
     @NotNull protected List<T> terms;
 
