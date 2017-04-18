@@ -2,7 +2,6 @@ package app.freelancer.syafiqq.text.classification.knn.core;
 
 import java.util.LinkedList;
 import java.util.List;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -12,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-public class TermContainer<T extends Term>
+@SuppressWarnings("WeakerAccess") public class TermContainer<T extends Term>
 {
     @NotNull protected List<T> terms;
 
@@ -23,11 +22,7 @@ public class TermContainer<T extends Term>
 
     public boolean add(T t)
     {
-        if(!this.terms.contains(t))
-        {
-            return terms.add(t);
-        }
-        return false;
+        return !this.terms.contains(t) && terms.add(t);
     }
 
     @NotNull public List<T> getTerms()
@@ -37,8 +32,8 @@ public class TermContainer<T extends Term>
 
     @Override public String toString()
     {
-        return new ToStringBuilder(this)
-                .append("terms", terms)
-                .toString();
+        return "TermContainer{" +
+                "terms=" + terms +
+                '}';
     }
 }
