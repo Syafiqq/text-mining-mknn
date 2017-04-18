@@ -1,6 +1,7 @@
 package case_0.clazz;
 
 import app.freelancer.syafiqq.text.classification.knn.core.Class;
+import app.freelancer.syafiqq.text.classification.knn.core.Term;
 import app.freelancer.syafiqq.text.classification.knn.core.TermContainer;
 import case_0.StringTerm;
 import java.util.List;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  */
 
 
-public class IntegerClass extends Class
+@SuppressWarnings("unused") public class IntegerClass extends Class
 {
     private          int                       clazz;
     @NotNull private TermContainer<StringTerm> terms;
@@ -38,9 +39,9 @@ public class IntegerClass extends Class
         this.clazz = clazz;
     }
 
-    public boolean addTerm(StringTerm stringTerm)
+    public void addTerm(StringTerm stringTerm)
     {
-        return this.terms.add(stringTerm);
+        this.terms.add(stringTerm);
     }
 
     @NotNull public TermContainer<StringTerm> getTermContainer()
@@ -48,22 +49,23 @@ public class IntegerClass extends Class
         return this.terms;
     }
 
-    @Override public String toString()
-    {
-        return new ToStringBuilder(this)
-                .append("clazz", clazz)
-                .toString();
-    }
-
     @Override public void collectTerms(@NotNull TermContainer terms)
     {
-        @NotNull final List<StringTerm> container = terms.getTerms();
-        for(@NotNull final StringTerm term : this.terms.getTerms())
+        @NotNull final List container = terms.getTerms();
+        for(@NotNull final Term term : this.terms.getTerms())
         {
             if(!container.contains(term))
             {
                 container.add(term);
             }
         }
+    }
+
+    @Override public String toString()
+    {
+        return new ToStringBuilder(this)
+                .append("clazz", clazz)
+                .append("terms", terms)
+                .toString();
     }
 }
