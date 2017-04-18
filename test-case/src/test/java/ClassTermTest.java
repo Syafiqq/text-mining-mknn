@@ -1,6 +1,6 @@
 import app.freelancer.syafiqq.text.classification.knn.core.KNN;
-import app.freelancer.syafiqq.text.classification.knn.core.TermContainer;
 import case_0.StringTerm;
+import case_0.StringTermContainer;
 import case_0.clazz.IntegerClass;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
@@ -58,7 +58,7 @@ public class ClassTermTest
         KNN knn = new KNN();
         knn.addClass(cl1);
         knn.addClass(cl2);
-        knn.setTerms(new TermContainer());
+        knn.setTerms(new StringTermContainer());
         knn.collectTerms();
 
         Assert.assertEquals(6, knn.getTermContainer().getTerms().size());
@@ -85,7 +85,7 @@ public class ClassTermTest
         KNN knn = new KNN();
         knn.addClass(cl1);
         knn.addClass(cl2);
-        knn.setTerms(new TermContainer());
+        knn.setTerms(new StringTermContainer());
         knn.collectTerms();
 
         Assert.assertEquals(5, knn.getTermContainer().getTerms().size());
@@ -112,7 +112,7 @@ public class ClassTermTest
         KNN knn = new KNN();
         knn.addClass(cl1);
         knn.addClass(cl2);
-        knn.setTerms(new TermContainer());
+        knn.setTerms(new StringTermContainer());
         knn.collectTerms();
 
         Assert.assertEquals(3, knn.getTermContainer().getTerms().size());

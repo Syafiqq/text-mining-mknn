@@ -1,7 +1,7 @@
 import app.freelancer.syafiqq.text.classification.knn.core.KNN;
-import app.freelancer.syafiqq.text.classification.knn.core.TermContainer;
 import app.freelancer.syafiqq.text.dummy.generator.DocumentDummyGenerator;
 import case_0.StringTerm;
+import case_0.StringTermContainer;
 import case_0.clazz.IntegerClass;
 import case_0.document.BagOfWordsImpl;
 import case_0.document.Journal;
@@ -63,7 +63,7 @@ public class DocumentCollectingTermTest
         KNN knn = new KNN();
         knn.getDocuments().addAll(journals);
         knn.getClasses().addAll(classes);
-        knn.setTerms(new TermContainer());
+        knn.setTerms(new StringTermContainer());
         knn.collectTerms();
 
         knn.tokenizeDocument();
