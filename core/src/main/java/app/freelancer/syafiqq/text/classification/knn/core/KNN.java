@@ -12,26 +12,59 @@ import org.jetbrains.annotations.Nullable;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-public class KNN
+public abstract class KNN
 {
-    @NotNull protected  List<Documents> documents;
+    @NotNull protected  List<Documents> classified;
     @NotNull protected  List<Class>     classes;
+    @NotNull protected  List<Documents> documents;
+    @Nullable protected Documents       unclassified;
     @Nullable protected TermContainer   terms;
+    @Nullable protected TermCounter     maxTermFrequency;
+    @Nullable protected BagOfWords      DFI;
+    @Nullable protected BagOfWords      IDF;
 
     public KNN()
     {
-        this.documents = new LinkedList<>();
+        this.classified = new LinkedList<>();
         this.classes = new LinkedList<>();
+        this.documents = new LinkedList<>();
     }
 
-    public boolean addDocuments(Documents documents)
+    public void compile()
     {
-        return this.documents.add(documents);
-    }
+        if(this.unclassified == null)
+        {
+            System.err.println("Add an Unclassified Document first");
+            System.exit(-1);
+        }
 
-    public boolean addClass(Class aClass)
-    {
-        return this.classes.add(aClass);
+        if(this.terms == null)
+        {
+            System.err.println("Specify Terms First");
+            System.exit(-1);
+        }
+
+        if(this.maxTermFrequency == null)
+        {
+            System.err.println("Specify Term Counter First");
+            System.exit(-1);
+        }
+
+        if(this.IDF == null)
+        {
+            System.err.println("Specify IDF First");
+            System.exit(-1);
+        }
+
+        if(this.DFI == null)
+        {
+            System.err.println("Specify DFI First");
+            System.exit(-1);
+        }
+
+        this.documents.clear();
+        this.documents.addAll(this.classified);
+        this.documents.add(this.unclassified);
     }
 
     public void collectTerms()
@@ -46,6 +79,7 @@ public class KNN
             {
                 clazz.collectTerms(this.terms);
             }
+            this.DFI.setTerms(this.terms);
         }
     }
 
@@ -59,14 +93,43 @@ public class KNN
         }
     }
 
-    @NotNull public List<Documents> getDocuments()
+    public void calculateTFIDF()
     {
-        return this.documents;
+        for(@NotNull final Documents document : this.documents)
+        {
+            document.getMaximumWord(this.maxTermFrequency);
+        }
+        for(@NotNull final Documents document : this.classified)
+        {
+            document.checkExistence(this.DFI);
+        }
+        this.calculateIDF();
+        for(@NotNull final Documents document : this.documents)
+        {
+            document.normalizeBOW(this.maxTermFrequency);
+        }
     }
 
-    public void setDocuments(@NotNull List<Documents> documents)
+    protected abstract void calculateIDF();
+
+    public boolean addClassifiedDocument(@NotNull Documents documents)
     {
-        this.documents = documents;
+        return this.classified.add(documents);
+    }
+
+    public boolean addClass(@NotNull Class aClass)
+    {
+        return this.classes.add(aClass);
+    }
+
+    @NotNull public List<Documents> getClassifiedDocument()
+    {
+        return this.classified;
+    }
+
+    public void setClassifiedDocument(@NotNull List<Documents> classified)
+    {
+        this.classified = classified;
     }
 
     @Nullable public TermContainer getTermContainer()
@@ -89,12 +152,54 @@ public class KNN
         this.classes = classes;
     }
 
+    public void addUnclassifiedDocument(@NotNull Documents documents)
+    {
+        this.unclassified = documents;
+    }
+
+    @Nullable public Documents getUnclassifiedDocument()
+    {
+        return this.unclassified;
+    }
+
+    @Nullable public TermCounter getMaxTermFrequency()
+    {
+        return this.maxTermFrequency;
+    }
+
+    public void setMaxTermFrequency(@NotNull TermCounter maxTermFrequency)
+    {
+        this.maxTermFrequency = maxTermFrequency;
+    }
+
+    @Nullable public BagOfWords getDFI()
+    {
+        return this.DFI;
+    }
+
+    public void setDFI(@NotNull BagOfWords DFI)
+    {
+        this.DFI = DFI;
+    }
+
+    @Nullable public BagOfWords getIDF()
+    {
+        return this.IDF;
+    }
+
+    public void setIDF(@NotNull BagOfWords IDF)
+    {
+        this.IDF = IDF;
+    }
+
     @Override public String toString()
     {
         return "KNN{" +
-                "documents=" + documents +
+                "classified=" + classified +
+                ", unclassified=" + unclassified +
                 ", classes=" + classes +
                 ", terms=" + terms +
+                ", maxTermFrequency=" + maxTermFrequency +
                 '}';
     }
 }
