@@ -11,21 +11,21 @@ import org.jetbrains.annotations.NotNull;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-@SuppressWarnings("WeakerAccess") public abstract class TermContainer<T extends Term>
+@SuppressWarnings("WeakerAccess") public abstract class TermContainer
 {
-    @NotNull protected List<T> terms;
+    @NotNull protected List<Term> terms;
 
     public TermContainer()
     {
         this.terms = new LinkedList<>();
     }
 
-    public boolean add(T t)
+    public boolean add(Term t)
     {
         return !this.terms.contains(t) && terms.add(t);
     }
 
-    @NotNull public List<T> getTerms()
+    @NotNull public List<Term> getTerms()
     {
         return this.terms;
     }
