@@ -1,9 +1,12 @@
 package case_0.document;
 
+import app.freelancer.syafiqq.text.classification.knn.core.BagOfWords;
 import app.freelancer.syafiqq.text.classification.knn.core.Documents;
+import app.freelancer.syafiqq.text.classification.knn.core.Term;
+import app.freelancer.syafiqq.text.classification.knn.core.TermContainer;
+import app.freelancer.syafiqq.text.classification.knn.core.TermCounter;
 import case_0.IntTermCounter;
 import case_0.StringTerm;
-import case_0.StringTermContainer;
 import case_0.clazz.IntegerClass;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -22,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-public class Journal extends Documents<IntegerClass, IntBagOfWords, StringTermContainer, IntTermCounter>
+public class Journal extends Documents
 {
     @NotNull private  String           documents;
     @NotNull private  List<String>     tokenizeDocuments;
@@ -59,46 +62,49 @@ public class Journal extends Documents<IntegerClass, IntBagOfWords, StringTermCo
         }
     }
 
-    @Override public void collectTerms(@Nullable StringTermContainer terms, @NotNull IntBagOfWords bagOfWords)
+    @Override public void collectTerms(@Nullable TermContainer terms, @NotNull BagOfWords bagOfWords)
     {
+        @NotNull final IntBagOfWords _bagOfWords = (IntBagOfWords) bagOfWords;
         if(terms != null)
         {
-            for(@NotNull final StringTerm term : terms.getTerms())
+            for(final Term term : terms.getTerms())
             {
-                bagOfWords.put(term, 0);
+                _bagOfWords.put((StringTerm) term, 0);
             }
 
-            for(@NotNull final StringTerm term : terms.getTerms())
+            for(final Term term : terms.getTerms())
             {
+                @NotNull final StringTerm _term = (StringTerm) term;
                 for(@NotNull final String token : this.tokenizeDocuments)
                 {
-                    if(term.getTerm().contentEquals(token))
+                    if(_term.getTerm().contentEquals(token))
                     {
-                        bagOfWords.increment(term);
+                        _bagOfWords.increment(_term);
                     }
                 }
             }
         }
     }
 
-    @Override public void normalizeBOW(@Nullable IntTermCounter container)
+    @Override public void normalizeBOW(@NotNull TermCounter counter)
     {
+        final @NotNull IntTermCounter _counter = (IntTermCounter) counter;
         this.normalizeBOW = new DoubleBagOfWords();
         @NotNull Object2DoubleMap<StringTerm> normalizeBOW = this.normalizeBOW.getBow();
-        for(@NotNull final Object2IntMap.Entry<StringTerm> word : this.bagOfWords.getBow().object2IntEntrySet())
+        for(@NotNull final Object2IntMap.Entry<StringTerm> word : ((IntBagOfWords) this.bagOfWords).getBow().object2IntEntrySet())
         {
-            normalizeBOW.put(word.getKey(), word.getIntValue() / container.getCount());
+            normalizeBOW.put(word.getKey(), word.getIntValue() / _counter.getCount());
         }
     }
 
-    @Override public void checkExistence(@NotNull IntBagOfWords dfi)
+    @Override public void checkExistence(@NotNull BagOfWords dfi)
     {
-        this.bagOfWords.checkExistence(dfi);
+        ((IntBagOfWords) this.bagOfWords).checkExistence((IntBagOfWords) dfi);
     }
 
-    @Override public void getMaximumWord(@NotNull IntTermCounter container)
+    @Override public void getMaximumWord(@NotNull TermCounter container)
     {
-        this.bagOfWords.getMaximumWord(container);
+        ((IntBagOfWords) this.bagOfWords).getMaximumWord((IntTermCounter) container);
     }
 
     @Override public String toString()

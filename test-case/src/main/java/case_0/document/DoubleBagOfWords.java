@@ -1,6 +1,7 @@
 package case_0.document;
 
 import app.freelancer.syafiqq.text.classification.knn.core.BagOfWords;
+import app.freelancer.syafiqq.text.classification.knn.core.Term;
 import app.freelancer.syafiqq.text.classification.knn.core.TermContainer;
 import case_0.StringTerm;
 import case_0.StringTermContainer;
@@ -53,9 +54,9 @@ public class DoubleBagOfWords extends BagOfWords
     {
         @NotNull final StringTermContainer _terms = (StringTermContainer) terms;
         this.getBow().clear();
-        for(final StringTerm term : _terms.getTerms())
+        for(final Term term : _terms.getTerms())
         {
-            this.put(term, 0);
+            this.put((StringTerm) term, 0);
         }
     }
 

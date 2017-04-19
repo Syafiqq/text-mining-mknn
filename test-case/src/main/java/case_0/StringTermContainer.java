@@ -9,6 +9,6 @@ import app.freelancer.syafiqq.text.classification.knn.core.TermContainer;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-public class StringTermContainer extends TermContainer<StringTerm>
+public class StringTermContainer extends TermContainer
 {
 }
