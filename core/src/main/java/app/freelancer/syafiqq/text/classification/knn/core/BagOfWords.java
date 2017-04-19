@@ -1,5 +1,7 @@
 package app.freelancer.syafiqq.text.classification.knn.core;
 
+import org.jetbrains.annotations.NotNull;
+
 /*
  * This <mknn> created by : 
  * Name         : syafiq
@@ -9,4 +11,5 @@ package app.freelancer.syafiqq.text.classification.knn.core;
  */
 public abstract class BagOfWords
 {
+    public abstract void setTerms(@NotNull TermContainer terms);
 }
