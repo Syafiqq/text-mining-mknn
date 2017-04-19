@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-public abstract class Documents<C extends Class, B extends BagOfWords, T extends TermContainer>
+public abstract class Documents<C extends Class, B extends BagOfWords, T extends TermContainer, TC extends TermCounter>
 {
     @Nullable protected C clazz;
     @NotNull protected  B bagOfWords;
@@ -47,6 +47,12 @@ public abstract class Documents<C extends Class, B extends BagOfWords, T extends
 
     public abstract void collectTerms(@Nullable T terms, @NotNull B bagOfWords);
 
+    public abstract void getMaximumWord(@NotNull TC container);
+
+    public abstract void normalizeBOW(@NotNull TC container);
+
+    public abstract void checkExistence(@NotNull B dfi);
+
     @Override public String toString()
     {
         return "Documents{" +
@@ -54,4 +60,5 @@ public abstract class Documents<C extends Class, B extends BagOfWords, T extends
                 ", bagOfWords=" + bagOfWords +
                 '}';
     }
+
 }
