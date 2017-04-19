@@ -1,9 +1,12 @@
 import app.freelancer.syafiqq.text.classification.knn.core.KNN;
 import app.freelancer.syafiqq.text.dummy.generator.DocumentDummyGenerator;
+import case_0.IntTermCounter;
+import case_0.KNNImpl;
 import case_0.StringTerm;
 import case_0.StringTermContainer;
 import case_0.clazz.IntegerClass;
-import case_0.document.BagOfWordsImpl;
+import case_0.document.DoubleBagOfWords;
+import case_0.document.IntBagOfWords;
 import case_0.document.Journal;
 import case_0.generator.DummyDocuments;
 import java.util.ArrayList;
@@ -28,13 +31,13 @@ public class DocumentCollectingTermTest
         final int[][]                termsMap  = dummy.generateTermsMap();
 
 /*        Arrays.stream(terms).forEach(System.out::println);
-        Arrays.stream(documents).forEach(System.out::println);
+        Arrays.stream(classified).forEach(System.out::println);
         System.out.println(Arrays.deepToString(termsMap));*/
 
         List<Journal> journals = new ArrayList<>(documents.length);
         for(@NotNull final String document : documents)
         {
-            journals.add(new Journal(null, new BagOfWordsImpl(), document));
+            journals.add(new Journal(null, new IntBagOfWords(), document));
         }
 
         final int          _CLASS_SIZE_ = 3;
@@ -60,15 +63,27 @@ public class DocumentCollectingTermTest
 
         //journals.forEach(System.out::println);
 
-        KNN knn = new KNN();
-        knn.getDocuments().addAll(journals);
+        KNN knn = new KNNImpl();
+        knn.addClassifiedDocument(journals.get(0));
+        knn.addClassifiedDocument(journals.get(1));
+        knn.addClassifiedDocument(journals.get(2));
+        knn.addClassifiedDocument(journals.get(3));
+        knn.addClassifiedDocument(journals.get(4));
+        knn.addClassifiedDocument(journals.get(5));
+        knn.addClassifiedDocument(journals.get(6));
+        knn.addUnclassifiedDocument(journals.get(7));
         knn.getClasses().addAll(classes);
         knn.setTerms(new StringTermContainer());
+        knn.setMaxTermFrequency(new IntTermCounter(null, Integer.MIN_VALUE));
+        knn.setDFI(new IntBagOfWords());
+        knn.setIDF(new DoubleBagOfWords());
+
+        knn.compile();
         knn.collectTerms();
-
         knn.tokenizeDocument();
+        knn.calculateTFIDF();
 
-        journals.forEach(journal -> System.out.println(journal.getBagOfWords()));
-
+        System.out.println(knn.getDFI());
+        System.out.println(knn.getIDF());
     }
 }

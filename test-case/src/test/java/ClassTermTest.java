@@ -1,4 +1,5 @@
 import app.freelancer.syafiqq.text.classification.knn.core.KNN;
+import case_0.KNNImpl;
 import case_0.StringTerm;
 import case_0.StringTermContainer;
 import case_0.clazz.IntegerClass;
@@ -55,7 +56,7 @@ public class ClassTermTest
         Assert.assertEquals(3, cl2.getTermContainer().getTerms().size());
         Assert.assertEquals(1, cl2.getClazz());
 
-        KNN knn = new KNN();
+        KNN knn = new KNNImpl();
         knn.addClass(cl1);
         knn.addClass(cl2);
         knn.setTerms(new StringTermContainer());
@@ -82,7 +83,7 @@ public class ClassTermTest
         Assert.assertEquals(3, cl2.getTermContainer().getTerms().size());
         Assert.assertEquals(1, cl2.getClazz());
 
-        KNN knn = new KNN();
+        KNN knn = new KNNImpl();
         knn.addClass(cl1);
         knn.addClass(cl2);
         knn.setTerms(new StringTermContainer());
@@ -109,7 +110,7 @@ public class ClassTermTest
         Assert.assertEquals(3, cl2.getTermContainer().getTerms().size());
         Assert.assertEquals(1, cl2.getClazz());
 
-        KNN knn = new KNN();
+        KNN knn = new KNNImpl();
         knn.addClass(cl1);
         knn.addClass(cl2);
         knn.setTerms(new StringTermContainer());
