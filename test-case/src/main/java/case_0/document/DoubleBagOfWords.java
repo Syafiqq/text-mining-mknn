@@ -30,12 +30,12 @@ public class DoubleBagOfWords extends BagOfWords
         return bow.put(stringTerm, v);
     }
 
-    public double getDouble(Object k)
+    public double getDouble(StringTerm k)
     {
         return bow.getDouble(k);
     }
 
-    public boolean containsKey(Object k)
+    public boolean containsKey(StringTerm k)
     {
         return bow.containsKey(k);
     }
