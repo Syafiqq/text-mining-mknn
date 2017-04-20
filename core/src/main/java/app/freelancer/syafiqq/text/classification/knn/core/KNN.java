@@ -69,27 +69,21 @@ public abstract class KNN
 
     public void collectTerms()
     {
-        if(this.terms == null)
+        for(@NotNull final Class clazz : this.classes)
         {
-            System.err.println("Terms not Instantiated");
+            this.terms.collectTerms(clazz);
         }
-        else
-        {
-            for(@NotNull final Class clazz : this.classes)
-            {
-                clazz.collectTerms(this.terms);
-            }
-            this.DFI.setTerms(this.terms);
-        }
+        this.DFI.setTerms(this.terms);
+        this.IDF.setTerms(this.terms);
     }
 
-    public void tokenizeDocument()
+    public void cleaningDocument()
     {
         for(@NotNull final Documents document : this.documents)
         {
             document.preProcess();
             document.tokenize();
-            document.collectTerms(this.terms, document.bagOfWords);
+            document.collectTerms(this.terms);
         }
     }
 
@@ -97,16 +91,25 @@ public abstract class KNN
     {
         for(@NotNull final Documents document : this.documents)
         {
-            document.getMaximumWord(this.maxTermFrequency);
+            document.findTermHighOccurrence(this.maxTermFrequency);
         }
         for(@NotNull final Documents document : this.classified)
         {
-            document.checkExistence(this.DFI);
+            document.findTermExistence(this.DFI);
         }
         this.calculateIDF();
         for(@NotNull final Documents document : this.documents)
         {
             document.normalizeBOW(this.maxTermFrequency);
+            document.calculateTFIDF(this.IDF);
+        }
+    }
+
+    public void calculateSimilarity()
+    {
+        for(@NotNull final Documents document : this.classified)
+        {
+            document.calculateSimilarity(this.unclassified);
         }
     }
 

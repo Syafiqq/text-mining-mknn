@@ -80,10 +80,16 @@ public class DocumentCollectingTermTest
 
         knn.compile();
         knn.collectTerms();
-        knn.tokenizeDocument();
+        knn.cleaningDocument();
         knn.calculateTFIDF();
+        knn.calculateSimilarity();
 
-        System.out.println(knn.getDFI());
+/*        System.out.println(knn.getDFI());
         System.out.println(knn.getIDF());
+        System.out.println();
+
+        journals.forEach(journal -> System.out.println(journal.getTfIdf()));
+        System.out.println();*/
+        journals.forEach(journal -> System.out.println(journal.getSimilarity()));
     }
 }
