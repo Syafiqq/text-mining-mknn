@@ -45,13 +45,17 @@ public abstract class Documents
 
     public abstract void tokenize();
 
-    public abstract void collectTerms(@Nullable TermContainer terms, @NotNull BagOfWords bagOfWords);
+    public abstract void collectTerms(@Nullable TermContainer terms);
 
-    public abstract void getMaximumWord(@NotNull TermCounter container);
+    public abstract void findTermHighOccurrence(@NotNull TermCounter container);
 
     public abstract void normalizeBOW(@NotNull TermCounter container);
 
-    public abstract void checkExistence(@NotNull BagOfWords dfi);
+    public abstract void findTermExistence(@NotNull BagOfWords dfi);
+
+    public abstract void calculateTFIDF(@NotNull BagOfWords idf);
+
+    public abstract void calculateSimilarity(@NotNull Documents unclassified);
 
     @Override public String toString()
     {
@@ -60,5 +64,4 @@ public abstract class Documents
                 ", bagOfWords=" + bagOfWords +
                 '}';
     }
-
 }
