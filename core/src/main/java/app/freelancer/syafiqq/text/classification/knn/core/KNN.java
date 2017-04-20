@@ -19,7 +19,6 @@ public abstract class KNN
     @NotNull protected  List<Documents> documents;
     @Nullable protected Documents       unclassified;
     @Nullable protected TermContainer   terms;
-    @Nullable protected TermCounter     maxTermFrequency;
     @Nullable protected BagOfWords      DFI;
     @Nullable protected BagOfWords      IDF;
 
@@ -41,12 +40,6 @@ public abstract class KNN
         if(this.terms == null)
         {
             System.err.println("Specify Terms First");
-            System.exit(-1);
-        }
-
-        if(this.maxTermFrequency == null)
-        {
-            System.err.println("Specify Term Counter First");
             System.exit(-1);
         }
 
@@ -89,10 +82,6 @@ public abstract class KNN
 
     public void calculateTFIDF()
     {
-        for(@NotNull final Documents document : this.documents)
-        {
-            document.findTermHighOccurrence(this.maxTermFrequency);
-        }
         for(@NotNull final Documents document : this.classified)
         {
             document.findTermExistence(this.DFI);
@@ -100,7 +89,6 @@ public abstract class KNN
         this.calculateIDF();
         for(@NotNull final Documents document : this.documents)
         {
-            document.normalizeBOW(this.maxTermFrequency);
             document.calculateTFIDF(this.IDF);
         }
     }
@@ -165,16 +153,6 @@ public abstract class KNN
         return this.unclassified;
     }
 
-    @Nullable public TermCounter getMaxTermFrequency()
-    {
-        return this.maxTermFrequency;
-    }
-
-    public void setMaxTermFrequency(@NotNull TermCounter maxTermFrequency)
-    {
-        this.maxTermFrequency = maxTermFrequency;
-    }
-
     @Nullable public BagOfWords getDFI()
     {
         return this.DFI;
@@ -202,7 +180,6 @@ public abstract class KNN
                 ", unclassified=" + unclassified +
                 ", classes=" + classes +
                 ", terms=" + terms +
-                ", maxTermFrequency=" + maxTermFrequency +
                 '}';
     }
 }
