@@ -30,6 +30,8 @@ import org.jetbrains.annotations.NotNull;
         return this.terms;
     }
 
+    public abstract void collectTerms(@NotNull Class clazz);
+
     @Override public String toString()
     {
         return "TermContainer{" +
