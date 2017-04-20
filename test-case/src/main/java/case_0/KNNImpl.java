@@ -22,7 +22,7 @@ public class KNNImpl extends KNN
         @NotNull DoubleBagOfWords idf = (DoubleBagOfWords) super.IDF;
         for(final Object2IntMap.Entry<StringTerm> word : dfi.getBow().object2IntEntrySet())
         {
-            idf.put(word.getKey(), FastMath.log10((double) super.terms.getTerms().size() / word.getIntValue()));
+            idf.put(word.getKey(), FastMath.log10((double) super.classified.size() / word.getIntValue()));
         }
     }
 }
