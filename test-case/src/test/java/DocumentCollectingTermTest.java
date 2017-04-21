@@ -75,12 +75,16 @@ public class DocumentCollectingTermTest
         knn.setTerms(new StringTermContainer());
         knn.setDFI(new IntBagOfWords());
         knn.setIDF(new DoubleBagOfWords());
+        knn.setK(5);
 
         knn.compile();
         knn.collectTerms();
         knn.cleaningDocument();
         knn.calculateTFIDF();
-        knn.calculateSimilarity();
+        knn.calculateValidity();
+        knn.calculateTest();
+        knn.getClasses().forEach(System.out::println);
+        System.out.println(journals.get(7));
 
 /*        System.out.println(knn.getDFI());
         System.out.println(knn.getIDF());
@@ -88,6 +92,6 @@ public class DocumentCollectingTermTest
 
         journals.forEach(journal -> System.out.println(journal.getTfIdf()));
         System.out.println();*/
-        journals.forEach(journal -> System.out.println(journal.getSimilarity()));
+        //journals.forEach(journal -> System.out.println(journal.getSimilarity()));
     }
 }
