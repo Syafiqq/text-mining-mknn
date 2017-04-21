@@ -7,6 +7,7 @@ import app.freelancer.syafiqq.text.classification.knn.core.TermContainer;
 import case_0.StringTerm;
 import case_0.clazz.IntegerClass;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -27,7 +28,6 @@ public class Journal extends Documents
 {
     @NotNull private  String           documents;
     @NotNull private  List<String>     tokenizeDocuments;
-    @Nullable private DoubleBagOfWords normalizeBOW;
     @Nullable private DoubleBagOfWords tfIdf;
     @Nullable private DoubleBagOfWords tfIdf2;
     private           double           similarity;
@@ -104,10 +104,10 @@ public class Journal extends Documents
         }
         //@NotNull Object2DoubleMap<StringTerm> tfidf = this.tfIdf.getBow();
         //@NotNull Object2DoubleMap<StringTerm> tfidf2 = this.tfIdf2.getBow();
-        for(@NotNull final Object2DoubleMap.Entry<StringTerm> term : this.normalizeBOW.getBow().object2DoubleEntrySet())
+        for(final Object2IntMap.Entry<StringTerm> term : ((IntBagOfWords) this.bagOfWords).getBow().object2IntEntrySet())
         {
             @NotNull final StringTerm _term = term.getKey();
-            this.tfIdf.put(_term, term.getDoubleValue() * _idf.getDouble(_term));
+            this.tfIdf.put(_term, term.getIntValue() * _idf.getDouble(_term));
             this.tfIdf2.put(_term, FastMath.pow(this.tfIdf.getDouble(_term), 2.0));
         }
     }
@@ -148,11 +148,6 @@ public class Journal extends Documents
     public void setTokenizeDocuments(@NotNull List<String> tokenizeDocuments)
     {
         this.tokenizeDocuments = tokenizeDocuments;
-    }
-
-    @Nullable public DoubleBagOfWords getNormalizeBOW()
-    {
-        return this.normalizeBOW;
     }
 
     @Nullable public DoubleBagOfWords getTfIdf()
