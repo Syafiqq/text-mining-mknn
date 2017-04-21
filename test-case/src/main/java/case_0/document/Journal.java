@@ -4,12 +4,9 @@ import app.freelancer.syafiqq.text.classification.knn.core.BagOfWords;
 import app.freelancer.syafiqq.text.classification.knn.core.Documents;
 import app.freelancer.syafiqq.text.classification.knn.core.Term;
 import app.freelancer.syafiqq.text.classification.knn.core.TermContainer;
-import app.freelancer.syafiqq.text.classification.knn.core.TermCounter;
-import case_0.IntTermCounter;
 import case_0.StringTerm;
 import case_0.clazz.IntegerClass;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -80,32 +77,9 @@ public class Journal extends Documents
         }
     }
 
-    @Override public void normalizeBOW(@NotNull TermCounter counter)
-    {
-        final @NotNull IntTermCounter _counter = (IntTermCounter) counter;
-        if(this.normalizeBOW == null)
-        {
-            this.normalizeBOW = new DoubleBagOfWords();
-        }
-        else
-        {
-            this.normalizeBOW.getBow().clear();
-        }
-        @NotNull Object2DoubleMap<StringTerm> normalizeBOW = this.normalizeBOW.getBow();
-        for(@NotNull final Object2IntMap.Entry<StringTerm> word : ((IntBagOfWords) this.bagOfWords).getBow().object2IntEntrySet())
-        {
-            normalizeBOW.put(word.getKey(), (double) word.getIntValue() /*/ _counter.getCount()*/);
-        }
-    }
-
     @Override public void findTermExistence(@NotNull BagOfWords dfi)
     {
         ((IntBagOfWords) this.bagOfWords).checkExistence((IntBagOfWords) dfi);
-    }
-
-    @Override public void findTermHighOccurrence(@NotNull TermCounter container)
-    {
-        ((IntBagOfWords) this.bagOfWords).getMaximumWord((IntTermCounter) container);
     }
 
     @Override public void calculateTFIDF(@NotNull BagOfWords idf)
