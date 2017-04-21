@@ -3,11 +3,9 @@ package case_0.document;
 import app.freelancer.syafiqq.text.classification.knn.core.BagOfWords;
 import app.freelancer.syafiqq.text.classification.knn.core.Term;
 import app.freelancer.syafiqq.text.classification.knn.core.TermContainer;
-import case_0.IntTermCounter;
 import case_0.StringTerm;
 import case_0.StringTermContainer;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,17 +43,6 @@ public class IntBagOfWords extends BagOfWords
     public boolean containsKey(StringTerm k)
     {
         return bow.containsKey(k);
-    }
-
-    public void getMaximumWord(@NotNull IntTermCounter maxTermFrequency)
-    {
-        for(final Object2IntMap.Entry<StringTerm> term : this.bow.object2IntEntrySet())
-        {
-            if(term.getIntValue() > maxTermFrequency.getCount())
-            {
-                maxTermFrequency.setProperties(term.getKey(), term.getIntValue());
-            }
-        }
     }
 
     @NotNull public Object2IntLinkedOpenHashMap<StringTerm> getBow()
