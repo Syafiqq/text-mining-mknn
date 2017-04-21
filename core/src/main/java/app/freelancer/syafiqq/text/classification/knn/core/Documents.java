@@ -1,5 +1,6 @@
 package app.freelancer.syafiqq.text.classification.knn.core;
 
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,11 +54,18 @@ public abstract class Documents
 
     public abstract void calculateSimilarity(@NotNull Documents unclassified);
 
+    public abstract int orderBySimilarity(@NotNull Documents document1);
+
+    public abstract void calculateValidity(@NotNull List<Documents> collection);
+
+    public abstract void calculateWeightVoting();
+
     @Override public String toString()
     {
-        return "Documents{" +
-                "clazz=" + clazz +
-                ", bagOfWords=" + bagOfWords +
-                '}';
+        final StringBuilder sb = new StringBuilder("Documents{");
+        sb.append("clazz=").append(clazz);
+        sb.append(", bagOfWords=").append(bagOfWords);
+        sb.append('}');
+        return sb.toString();
     }
 }
