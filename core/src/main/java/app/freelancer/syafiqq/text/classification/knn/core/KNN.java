@@ -2,6 +2,7 @@ package app.freelancer.syafiqq.text.classification.knn.core;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,6 +22,7 @@ public abstract class KNN
     @Nullable protected TermContainer   terms;
     @Nullable protected BagOfWords      DFI;
     @Nullable protected BagOfWords      IDF;
+    protected           int             k;
 
     public KNN()
     {
@@ -55,6 +57,12 @@ public abstract class KNN
             System.exit(-1);
         }
 
+        if((this.k <= 0) && this.k >= (this.classified.size() - 1))
+        {
+            System.err.println("1 >= k <= train_size");
+            System.exit(-1);
+        }
+
         this.documents.clear();
         this.documents.addAll(this.classified);
         this.documents.add(this.unclassified);
@@ -62,43 +70,46 @@ public abstract class KNN
 
     public void collectTerms()
     {
-        for(@NotNull final Class clazz : this.classes)
-        {
-            this.terms.collectTerms(clazz);
-        }
+        this.classes.forEach(clazz -> this.terms.collectTerms(clazz));
         this.DFI.setTerms(this.terms);
         this.IDF.setTerms(this.terms);
     }
 
     public void cleaningDocument()
     {
-        for(@NotNull final Documents document : this.documents)
+        this.documents.forEach(documents ->
         {
-            document.preProcess();
-            document.tokenize();
-            document.collectTerms(this.terms);
-        }
+            documents.preProcess();
+            documents.tokenize();
+            documents.collectTerms(this.terms);
+        });
     }
 
     public void calculateTFIDF()
     {
-        for(@NotNull final Documents document : this.classified)
-        {
-            document.findTermExistence(this.DFI);
-        }
+        this.classified.forEach(document -> document.findTermExistence(this.DFI));
         this.calculateIDF();
-        for(@NotNull final Documents document : this.documents)
-        {
-            document.calculateTFIDF(this.IDF);
-        }
+        this.documents.forEach(document -> document.calculateTFIDF(this.IDF));
     }
 
-    public void calculateSimilarity()
+    public void calculateValidity()
     {
-        for(@NotNull final Documents document : this.classified)
+        this.classified.forEach(train ->
         {
-            document.calculateSimilarity(this.unclassified);
-        }
+            this.classified.forEach(validator -> validator.calculateSimilarity(train));
+            this.classified.sort((o1, o2) -> o1.orderBySimilarity(o2));
+            train.calculateValidity(this.classified.stream().skip(1).limit(this.k).collect(Collectors.toList()));
+        });
+    }
+
+    public void calculateTest()
+    {
+        this.classified.forEach(document -> document.calculateSimilarity(this.unclassified));
+        this.classified.sort((o1, o2) -> o1.orderBySimilarity(o2));
+        this.classified.stream().limit(this.k).collect(Collectors.toList()).forEach(Documents::calculateWeightVoting);
+        this.classes.forEach(clazz -> clazz.summarizeVoting(this.classified.stream().limit(this.k).filter(documents1 -> documents1.clazz.equals(clazz)).collect(Collectors.toList())));
+        this.classes.sort((o1, o2) -> o1.orderByWeight(o2));
+        this.unclassified.setClazz(this.classes.get(0));
     }
 
     protected abstract void calculateIDF();
@@ -173,13 +184,28 @@ public abstract class KNN
         this.IDF = IDF;
     }
 
+    public int getK()
+    {
+        return this.k;
+    }
+
+    public void setK(int k)
+    {
+        this.k = k;
+    }
+
     @Override public String toString()
     {
-        return "KNN{" +
-                "classified=" + classified +
-                ", unclassified=" + unclassified +
-                ", classes=" + classes +
-                ", terms=" + terms +
-                '}';
+        final StringBuilder sb = new StringBuilder("KNN{");
+        sb.append("classified=").append(classified);
+        sb.append(", classes=").append(classes);
+        sb.append(", documents=").append(documents);
+        sb.append(", unclassified=").append(unclassified);
+        sb.append(", terms=").append(terms);
+        sb.append(", DFI=").append(DFI);
+        sb.append(", IDF=").append(IDF);
+        sb.append(", k=").append(k);
+        sb.append('}');
+        return sb.toString();
     }
 }
