@@ -24,6 +24,6 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jetbrains/annotations
     compile group: 'org.jetbrains', name: 'annotations', version: '15.0'
 
-    compile project (':core')
-    compile project (':dummy-generator')
+    compile project(':core')
+    compile project(':dummy-generator')
 }

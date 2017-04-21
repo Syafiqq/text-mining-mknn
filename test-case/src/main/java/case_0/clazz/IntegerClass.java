@@ -1,9 +1,13 @@
 package case_0.clazz;
 
 import app.freelancer.syafiqq.text.classification.knn.core.Class;
+import app.freelancer.syafiqq.text.classification.knn.core.Documents;
 import case_0.StringTerm;
 import case_0.StringTermContainer;
+import case_0.document.Journal;
+import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.math3.util.FastMath;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -19,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 {
     private          int                 clazz;
     @NotNull private StringTermContainer terms;
+    private          double              weight;
 
 
     public IntegerClass(int clazz)
@@ -47,11 +52,53 @@ import org.jetbrains.annotations.NotNull;
         return this.terms;
     }
 
+    @Override public boolean equals(Object o)
+    {
+        if(this == o)
+        {
+            return true;
+        }
+        if(o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        IntegerClass that = (IntegerClass) o;
+
+        return clazz == that.clazz;
+    }
+
+    @Override public void summarizeVoting(@NotNull List<Documents> collect)
+    {
+        this.weight = collect.stream().mapToDouble(value -> ((Journal) value).getWeightVoting()).sum();
+    }
+
+    @Override public int hashCode()
+    {
+        return clazz;
+    }
+
+    @Override public int orderByWeight(@NotNull Class clazz)
+    {
+        return -(int) FastMath.signum(this.weight - ((IntegerClass) clazz).weight);
+    }
+
+    public double getWeight()
+    {
+        return this.weight;
+    }
+
+    public void setWeight(double weight)
+    {
+        this.weight = weight;
+    }
+
     @Override public String toString()
     {
         return new ToStringBuilder(this)
                 .append("clazz", clazz)
                 .append("terms", terms)
+                .append("weight", weight)
                 .toString();
     }
 }

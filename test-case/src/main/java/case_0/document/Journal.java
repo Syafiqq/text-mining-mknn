@@ -4,8 +4,6 @@ import app.freelancer.syafiqq.text.classification.knn.core.BagOfWords;
 import app.freelancer.syafiqq.text.classification.knn.core.Documents;
 import app.freelancer.syafiqq.text.classification.knn.core.Term;
 import app.freelancer.syafiqq.text.classification.knn.core.TermContainer;
-import app.freelancer.syafiqq.text.classification.knn.core.TermCounter;
-import case_0.IntTermCounter;
 import case_0.StringTerm;
 import case_0.clazz.IntegerClass;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
@@ -14,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.math3.util.FastMath;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,10 +27,11 @@ public class Journal extends Documents
 {
     @NotNull private  String           documents;
     @NotNull private  List<String>     tokenizeDocuments;
-    @Nullable private DoubleBagOfWords normalizeBOW;
     @Nullable private DoubleBagOfWords tfIdf;
     @Nullable private DoubleBagOfWords tfIdf2;
     private           double           similarity;
+    private           double           validity;
+    private           double           weightVoting;
 
     public Journal(@Nullable IntegerClass clazz, @NotNull IntBagOfWords bow, @NotNull String documents)
     {
@@ -80,32 +78,9 @@ public class Journal extends Documents
         }
     }
 
-    @Override public void normalizeBOW(@NotNull TermCounter counter)
-    {
-        final @NotNull IntTermCounter _counter = (IntTermCounter) counter;
-        if(this.normalizeBOW == null)
-        {
-            this.normalizeBOW = new DoubleBagOfWords();
-        }
-        else
-        {
-            this.normalizeBOW.getBow().clear();
-        }
-        @NotNull Object2DoubleMap<StringTerm> normalizeBOW = this.normalizeBOW.getBow();
-        for(@NotNull final Object2IntMap.Entry<StringTerm> word : ((IntBagOfWords) this.bagOfWords).getBow().object2IntEntrySet())
-        {
-            normalizeBOW.put(word.getKey(), (double) word.getIntValue() /*/ _counter.getCount()*/);
-        }
-    }
-
     @Override public void findTermExistence(@NotNull BagOfWords dfi)
     {
         ((IntBagOfWords) this.bagOfWords).checkExistence((IntBagOfWords) dfi);
-    }
-
-    @Override public void findTermHighOccurrence(@NotNull TermCounter container)
-    {
-        ((IntBagOfWords) this.bagOfWords).getMaximumWord((IntTermCounter) container);
     }
 
     @Override public void calculateTFIDF(@NotNull BagOfWords idf)
@@ -128,12 +103,10 @@ public class Journal extends Documents
         {
             this.tfIdf2.getBow().clear();
         }
-        //@NotNull Object2DoubleMap<StringTerm> tfidf = this.tfIdf.getBow();
-        //@NotNull Object2DoubleMap<StringTerm> tfidf2 = this.tfIdf2.getBow();
-        for(@NotNull final Object2DoubleMap.Entry<StringTerm> term : this.normalizeBOW.getBow().object2DoubleEntrySet())
+        for(final Object2IntMap.Entry<StringTerm> term : ((IntBagOfWords) this.bagOfWords).getBow().object2IntEntrySet())
         {
             @NotNull final StringTerm _term = term.getKey();
-            this.tfIdf.put(_term, term.getDoubleValue() * _idf.getDouble(_term));
+            this.tfIdf.put(_term, term.getIntValue() * _idf.getDouble(_term));
             this.tfIdf2.put(_term, FastMath.pow(this.tfIdf.getDouble(_term), 2.0));
         }
     }
@@ -156,6 +129,29 @@ public class Journal extends Documents
         this.similarity = qD / (FastMath.sqrt(q_) * FastMath.sqrt(d_));
     }
 
+    @Override public int orderBySimilarity(@NotNull Documents document1)
+    {
+        return -(int) FastMath.signum(this.similarity - ((Journal) document1).similarity);
+    }
+
+    @Override public void calculateValidity(@NotNull List<Documents> collection)
+    {
+        int s = 0;
+        for(Documents documents1 : collection)
+        {
+            if(this.clazz.equals(((Journal) documents1).clazz))
+            {
+                ++s;
+            }
+        }
+        this.validity = (1.0 / collection.size()) * s;
+    }
+
+    @Override public void calculateWeightVoting()
+    {
+        this.weightVoting = this.validity * (1.0 / (this.similarity + 0.5));
+    }
+
     @NotNull public String getDocuments()
     {
         return this.documents;
@@ -174,11 +170,6 @@ public class Journal extends Documents
     public void setTokenizeDocuments(@NotNull List<String> tokenizeDocuments)
     {
         this.tokenizeDocuments = tokenizeDocuments;
-    }
-
-    @Nullable public DoubleBagOfWords getNormalizeBOW()
-    {
-        return this.normalizeBOW;
     }
 
     @Nullable public DoubleBagOfWords getTfIdf()
@@ -201,12 +192,38 @@ public class Journal extends Documents
         this.similarity = similarity;
     }
 
+    public double getValidity()
+    {
+        return this.validity;
+    }
+
+    public void setValidity(double validity)
+    {
+        this.validity = validity;
+    }
+
+    public double getWeightVoting()
+    {
+        return this.weightVoting;
+    }
+
+    public void setWeightVoting(double weightVoting)
+    {
+        this.weightVoting = weightVoting;
+    }
+
     @Override public String toString()
     {
-        return new ToStringBuilder(this)
-                .append("clazz", clazz)
-                .append("bagOfWords", bagOfWords)
-                .append("classified", documents)
-                .toString();
+        final StringBuilder sb = new StringBuilder("Journal{");
+        sb.append("clazz=").append(clazz);
+        sb.append(", bagOfWords=").append(bagOfWords);
+        sb.append(", documents='").append(documents).append('\'');
+        sb.append(", tokenizeDocuments=").append(tokenizeDocuments);
+        sb.append(", tfIdf=").append(tfIdf);
+        sb.append(", tfIdf2=").append(tfIdf2);
+        sb.append(", similarity=").append(similarity);
+        sb.append(", validity=").append(validity);
+        sb.append('}');
+        return sb.toString();
     }
 }
