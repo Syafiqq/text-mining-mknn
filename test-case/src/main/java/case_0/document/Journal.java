@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.math3.util.FastMath;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,6 +30,8 @@ public class Journal extends Documents
     @Nullable private DoubleBagOfWords tfIdf;
     @Nullable private DoubleBagOfWords tfIdf2;
     private           double           similarity;
+    private           double           validity;
+    private           double           weightVoting;
 
     public Journal(@Nullable IntegerClass clazz, @NotNull IntBagOfWords bow, @NotNull String documents)
     {
@@ -102,8 +103,6 @@ public class Journal extends Documents
         {
             this.tfIdf2.getBow().clear();
         }
-        //@NotNull Object2DoubleMap<StringTerm> tfidf = this.tfIdf.getBow();
-        //@NotNull Object2DoubleMap<StringTerm> tfidf2 = this.tfIdf2.getBow();
         for(final Object2IntMap.Entry<StringTerm> term : ((IntBagOfWords) this.bagOfWords).getBow().object2IntEntrySet())
         {
             @NotNull final StringTerm _term = term.getKey();
@@ -128,6 +127,29 @@ public class Journal extends Documents
         }
 
         this.similarity = qD / (FastMath.sqrt(q_) * FastMath.sqrt(d_));
+    }
+
+    @Override public int orderBySimilarity(@NotNull Documents document1)
+    {
+        return -(int) FastMath.signum(this.similarity - ((Journal) document1).similarity);
+    }
+
+    @Override public void calculateValidity(@NotNull List<Documents> collection)
+    {
+        int s = 0;
+        for(Documents documents1 : collection)
+        {
+            if(this.clazz.equals(((Journal) documents1).clazz))
+            {
+                ++s;
+            }
+        }
+        this.validity = (1.0 / collection.size()) * s;
+    }
+
+    @Override public void calculateWeightVoting()
+    {
+        this.weightVoting = this.validity * (1.0 / (this.similarity + 0.5));
     }
 
     @NotNull public String getDocuments()
@@ -170,12 +192,38 @@ public class Journal extends Documents
         this.similarity = similarity;
     }
 
+    public double getValidity()
+    {
+        return this.validity;
+    }
+
+    public void setValidity(double validity)
+    {
+        this.validity = validity;
+    }
+
+    public double getWeightVoting()
+    {
+        return this.weightVoting;
+    }
+
+    public void setWeightVoting(double weightVoting)
+    {
+        this.weightVoting = weightVoting;
+    }
+
     @Override public String toString()
     {
-        return new ToStringBuilder(this)
-                .append("clazz", clazz)
-                .append("bagOfWords", bagOfWords)
-                .append("classified", documents)
-                .toString();
+        final StringBuilder sb = new StringBuilder("Journal{");
+        sb.append("clazz=").append(clazz);
+        sb.append(", bagOfWords=").append(bagOfWords);
+        sb.append(", documents='").append(documents).append('\'');
+        sb.append(", tokenizeDocuments=").append(tokenizeDocuments);
+        sb.append(", tfIdf=").append(tfIdf);
+        sb.append(", tfIdf2=").append(tfIdf2);
+        sb.append(", similarity=").append(similarity);
+        sb.append(", validity=").append(validity);
+        sb.append('}');
+        return sb.toString();
     }
 }
