@@ -34,8 +34,9 @@ import org.jetbrains.annotations.NotNull;
 
     @Override public String toString()
     {
-        return "TermContainer{" +
-                "terms=" + terms +
-                '}';
+        final StringBuilder sb = new StringBuilder("TermContainer{");
+        sb.append("terms=").append(terms);
+        sb.append('}');
+        return sb.toString();
     }
 }
