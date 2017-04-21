@@ -1,6 +1,5 @@
 import app.freelancer.syafiqq.text.classification.knn.core.KNN;
 import app.freelancer.syafiqq.text.dummy.generator.DocumentDummyGenerator;
-import case_0.IntTermCounter;
 import case_0.KNNImpl;
 import case_0.StringTerm;
 import case_0.StringTermContainer;
@@ -74,7 +73,6 @@ public class DocumentCollectingTermTest
         knn.addUnclassifiedDocument(journals.get(7));
         knn.getClasses().addAll(classes);
         knn.setTerms(new StringTermContainer());
-        knn.setMaxTermFrequency(new IntTermCounter(null, Integer.MIN_VALUE));
         knn.setDFI(new IntBagOfWords());
         knn.setIDF(new DoubleBagOfWords());
 
