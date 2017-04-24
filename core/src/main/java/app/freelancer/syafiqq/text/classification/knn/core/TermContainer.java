@@ -1,7 +1,7 @@
 package app.freelancer.syafiqq.text.classification.knn.core;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -11,13 +11,13 @@ import org.jetbrains.annotations.NotNull;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-@SuppressWarnings("WeakerAccess") public abstract class TermContainer
+@SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "StringBufferReplaceableByString"}) public abstract class TermContainer
 {
-    @NotNull protected List<Term> terms;
+    @NotNull protected Set<Term> terms;
 
     public TermContainer()
     {
-        this.terms = new LinkedList<>();
+        this.terms = new LinkedHashSet<>();
     }
 
     public boolean add(Term t)
@@ -25,12 +25,12 @@ import org.jetbrains.annotations.NotNull;
         return !this.terms.contains(t) && terms.add(t);
     }
 
-    @NotNull public List<Term> getTerms()
+    @NotNull public Set<Term> getTerms()
     {
         return this.terms;
     }
 
-    public abstract void collectTerms(@NotNull Class clazz);
+    public abstract void collectTerms(@NotNull Documents document);
 
     @Override public String toString()
     {
