@@ -1,3 +1,5 @@
+package case_0;
+
 import app.freelancer.syafiqq.text.dummy.generator.DocumentDummyGenerator;
 import case_0.generator.DummyDocuments;
 import java.util.Arrays;

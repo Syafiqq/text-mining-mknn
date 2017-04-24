@@ -1,3 +1,5 @@
+package case_0;
+
 import case_0.clazz.IntegerClass;
 import case_0.document.IntBagOfWords;
 import case_0.document.Journal;

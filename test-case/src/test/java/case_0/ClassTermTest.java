@@ -1,7 +1,6 @@
+package case_0;
+
 import app.freelancer.syafiqq.text.classification.knn.core.KNN;
-import case_0.KNNImpl;
-import case_0.StringTerm;
-import case_0.StringTermContainer;
 import case_0.clazz.IntegerClass;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;

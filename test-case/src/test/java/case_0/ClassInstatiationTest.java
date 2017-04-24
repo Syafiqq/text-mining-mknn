@@ -1,3 +1,5 @@
+package case_0;
+
 import case_0.clazz.IntegerClass;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
