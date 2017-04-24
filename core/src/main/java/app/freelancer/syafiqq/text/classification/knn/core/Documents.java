@@ -11,15 +11,27 @@ import org.jetbrains.annotations.Nullable;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-public abstract class Documents
+@SuppressWarnings({"WeakerAccess", "unused", "StringBufferReplaceableByString"}) public abstract class Documents
 {
     @Nullable protected Class      clazz;
+    @Nullable protected Class      classified;
     @NotNull protected  BagOfWords bagOfWords;
 
     public Documents(@Nullable Class clazz, @NotNull BagOfWords bagOfWords)
     {
         this.clazz = clazz;
+        this.classified = null;
         this.bagOfWords = bagOfWords;
+    }
+
+    @Nullable public Class getClassified()
+    {
+        return this.classified;
+    }
+
+    public void setClassified(@Nullable Class classified)
+    {
+        this.classified = classified;
     }
 
     @Nullable public Class getClazz()
@@ -44,26 +56,25 @@ public abstract class Documents
 
     public abstract void preProcess();
 
-    public abstract void tokenize();
-
-    public abstract void collectTerms(@Nullable TermContainer terms);
-
-    public abstract void findTermExistence(@NotNull BagOfWords dfi);
+    public abstract void countTerms(@NotNull TermContainer terms);
 
     public abstract void calculateTFIDF(@NotNull BagOfWords idf);
 
-    public abstract void calculateSimilarity(@NotNull Documents unclassified);
+    public abstract void calculateSimilarity(@NotNull Documents unclassified, @NotNull TermContainer terms);
 
-    public abstract int orderBySimilarity(@NotNull Documents document1);
+    public abstract void orderSimilarity();
 
-    public abstract void calculateValidity(@NotNull List<Documents> collection);
+    public abstract void calculateValidity(int k);
 
-    public abstract void calculateWeightVoting();
+    public abstract void calculateWeightVoting(int k);
+
+    public abstract void summarizeAndClassify(@NotNull List<Class> classes);
 
     @Override public String toString()
     {
-        final StringBuilder sb = new StringBuilder("Documents{");
+        @NotNull final StringBuilder sb = new StringBuilder("Documents{");
         sb.append("clazz=").append(clazz);
+        sb.append(", classified=").append(classified);
         sb.append(", bagOfWords=").append(bagOfWords);
         sb.append('}');
         return sb.toString();
