@@ -1,8 +1,5 @@
 package app.freelancer.syafiqq.text.classification.knn.core;
 
-import java.util.List;
-import org.jetbrains.annotations.NotNull;
-
 /*
  * This <mknn> created by : 
  * Name         : syafiq
@@ -12,7 +9,4 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class Class
 {
-    public abstract void summarizeVoting(@NotNull List<Documents> collect);
-
-    public abstract int orderByWeight(@NotNull Class clazz);
 }
