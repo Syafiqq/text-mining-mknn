@@ -2,7 +2,6 @@ package app.freelancer.syafiqq.text.classification.knn.core;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,12 +12,11 @@ import org.jetbrains.annotations.Nullable;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-public abstract class KNN
+@SuppressWarnings({"SameParameterValue", "WeakerAccess", "unused", "ConstantConditions"}) public abstract class KNN
 {
     @NotNull protected  List<Documents> classified;
+    @NotNull protected  List<Documents> unclassified;
     @NotNull protected  List<Class>     classes;
-    @NotNull protected  List<Documents> documents;
-    @Nullable protected Documents       unclassified;
     @Nullable protected TermContainer   terms;
     @Nullable protected BagOfWords      DFI;
     @Nullable protected BagOfWords      IDF;
@@ -27,18 +25,24 @@ public abstract class KNN
     public KNN()
     {
         this.classified = new LinkedList<>();
+        this.unclassified = new LinkedList<>();
         this.classes = new LinkedList<>();
-        this.documents = new LinkedList<>();
     }
 
-    public void compile()
+    public void test(@NotNull Documents unclassified)
     {
-        if(this.unclassified == null)
-        {
-            System.err.println("Add an Unclassified Document first");
-            System.exit(-1);
-        }
+        unclassified.preProcess();
+        unclassified.countTerms(this.terms);
+        unclassified.calculateTFIDF(this.IDF);
+        this.classified.forEach(document -> unclassified.calculateSimilarity(document, this.terms));
+        unclassified.orderSimilarity();
+        unclassified.calculateWeightVoting(this.k);
+        unclassified.summarizeAndClassify(this.classes);
+    }
 
+    public void train()
+    {
+        //===Compile===
         if(this.terms == null)
         {
             System.err.println("Specify Terms First");
@@ -63,55 +67,32 @@ public abstract class KNN
             System.exit(-1);
         }
 
-        this.documents.clear();
-        this.documents.addAll(this.classified);
-        this.documents.add(this.unclassified);
-    }
-
-    public void collectTerms()
-    {
-        this.classes.forEach(clazz -> this.terms.collectTerms(clazz));
-        this.DFI.setTerms(this.terms);
-        this.IDF.setTerms(this.terms);
-    }
-
-    public void cleaningDocument()
-    {
-        this.documents.forEach(documents ->
+        //===Cleaning===
+        this.classified.forEach(documents ->
         {
             documents.preProcess();
-            documents.tokenize();
-            documents.collectTerms(this.terms);
+            this.terms.collectTerms(documents);
         });
-    }
 
-    public void calculateTFIDF()
-    {
-        this.classified.forEach(document -> document.findTermExistence(this.DFI));
+        //===Collect Terms===
+        this.classified.forEach(documents -> documents.countTerms(this.terms));
+        this.DFI.setTerms(this.terms);
+        this.IDF.setTerms(this.terms);
+
+        //===Calculate TF-IDF===
+        this.classified.forEach(document -> this.DFI.checkExistence(document));
         this.calculateIDF();
-        this.documents.forEach(document -> document.calculateTFIDF(this.IDF));
-    }
+        this.classified.forEach(document -> document.calculateTFIDF(this.IDF));
 
-    public void calculateValidity()
-    {
+        //===Calculate Validity===
         this.classified.forEach(train ->
         {
-            this.classified.forEach(validator -> validator.calculateSimilarity(train));
-            this.classified.sort((o1, o2) -> o1.orderBySimilarity(o2));
-            train.calculateValidity(this.classified.stream().skip(1).limit(this.k).collect(Collectors.toList()));
+            this.classified.stream().filter(document -> !document.equals(train)).forEach(document -> train.calculateSimilarity(document, this.terms));
+            train.orderSimilarity();
+            train.calculateValidity(this.k);
         });
     }
-
-    public void calculateTest()
-    {
-        this.classified.forEach(document -> document.calculateSimilarity(this.unclassified));
-        this.classified.sort((o1, o2) -> o1.orderBySimilarity(o2));
-        this.classified.stream().limit(this.k).collect(Collectors.toList()).forEach(Documents::calculateWeightVoting);
-        this.classes.forEach(clazz -> clazz.summarizeVoting(this.classified.stream().limit(this.k).filter(documents1 -> documents1.clazz.equals(clazz)).collect(Collectors.toList())));
-        this.classes.sort((o1, o2) -> o1.orderByWeight(o2));
-        this.unclassified.setClazz(this.classes.get(0));
-    }
-
+    
     protected abstract void calculateIDF();
 
     public boolean addClassifiedDocument(@NotNull Documents documents)
@@ -129,19 +110,19 @@ public abstract class KNN
         return this.classified;
     }
 
-    public void setClassifiedDocument(@NotNull List<Documents> classified)
+    public void setClassified(@NotNull List<Documents> classified)
     {
         this.classified = classified;
     }
 
-    @Nullable public TermContainer getTermContainer()
+    @NotNull public List<Documents> getUnclassified()
     {
-        return this.terms;
+        return this.unclassified;
     }
 
-    public void setTerms(@NotNull TermContainer terms)
+    public void setUnclassified(@NotNull List<Documents> unclassified)
     {
-        this.terms = terms;
+        this.unclassified = unclassified;
     }
 
     @NotNull public List<Class> getClasses()
@@ -154,14 +135,14 @@ public abstract class KNN
         this.classes = classes;
     }
 
-    public void addUnclassifiedDocument(@NotNull Documents documents)
+    @Nullable public TermContainer getTerms()
     {
-        this.unclassified = documents;
+        return this.terms;
     }
 
-    @Nullable public Documents getUnclassifiedDocument()
+    public void setTerms(@Nullable TermContainer terms)
     {
-        return this.unclassified;
+        this.terms = terms;
     }
 
     @Nullable public BagOfWords getDFI()
@@ -169,7 +150,7 @@ public abstract class KNN
         return this.DFI;
     }
 
-    public void setDFI(@NotNull BagOfWords DFI)
+    public void setDFI(@Nullable BagOfWords DFI)
     {
         this.DFI = DFI;
     }
@@ -179,7 +160,7 @@ public abstract class KNN
         return this.IDF;
     }
 
-    public void setIDF(@NotNull BagOfWords IDF)
+    public void setIDF(@Nullable BagOfWords IDF)
     {
         this.IDF = IDF;
     }
@@ -194,13 +175,12 @@ public abstract class KNN
         this.k = k;
     }
 
-    @Override public String toString()
+    @SuppressWarnings("StringBufferReplaceableByString") @Override public String toString()
     {
         final StringBuilder sb = new StringBuilder("KNN{");
         sb.append("classified=").append(classified);
-        sb.append(", classes=").append(classes);
-        sb.append(", documents=").append(documents);
         sb.append(", unclassified=").append(unclassified);
+        sb.append(", classes=").append(classes);
         sb.append(", terms=").append(terms);
         sb.append(", DFI=").append(DFI);
         sb.append(", IDF=").append(IDF);
