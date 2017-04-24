@@ -12,4 +12,6 @@ import org.jetbrains.annotations.NotNull;
 public abstract class BagOfWords
 {
     public abstract void setTerms(@NotNull TermContainer terms);
+
+    public abstract void checkExistence(@NotNull Documents document);
 }
