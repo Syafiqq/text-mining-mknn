@@ -2,8 +2,6 @@ package case_0;
 
 import app.freelancer.syafiqq.text.classification.knn.core.KNN;
 import case_0.document.DoubleBagOfWords;
-import case_0.document.IntBagOfWords;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import org.apache.commons.math3.util.FastMath;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,11 +16,9 @@ public class KNNImpl extends KNN
 {
     @Override protected void calculateIDF()
     {
-        @NotNull IntBagOfWords    dfi = (IntBagOfWords) super.DFI;
-        @NotNull DoubleBagOfWords idf = (DoubleBagOfWords) super.IDF;
-        for(final Object2IntMap.Entry<StringTerm> word : dfi.getBow().object2IntEntrySet())
-        {
-            idf.put(word.getKey(), FastMath.log10((double) super.classified.size() / word.getIntValue()));
-        }
+        @NotNull final DoubleBagOfWords dfi  = (DoubleBagOfWords) super.DFI;
+        @NotNull final DoubleBagOfWords idf  = (DoubleBagOfWords) super.IDF;
+        final double                    size = (double) super.classified.size();
+        dfi.getBow().forEach((term, occurrence) -> idf.put(term, FastMath.log10(size / occurrence)));
     }
 }
