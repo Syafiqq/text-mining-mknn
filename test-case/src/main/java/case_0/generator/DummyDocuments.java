@@ -4,8 +4,6 @@ import app.freelancer.syafiqq.text.dummy.generator.DocumentDummyGenerator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 /*
  * This <mknn> created by : 
@@ -21,19 +19,10 @@ public class DummyDocuments extends DocumentDummyGenerator
 
     int[][] documents = new int[][]
             {
-                    {6, 4, 1, 3, 1, 5, 6, 4, 5, 5, 3, 1, 5},
-                    {1, 1, 2, 6, 3, 0, 2, 3, 4, 3, 4, 5, 3},
-                    {4, 2, 1, 2, 3, 1, 3, 2, 0, 6, 4, 6, 3},
-                    {3, 3, 1, 6, 0, 3, 0, 2, 0, 0, 4, 6, 6},
-                    {2, 5, 1, 2, 0, 5, 4, 1, 1, 1, 0, 4, 5},
-                    {4, 0, 0, 0, 0, 2, 5, 5, 5, 3, 1, 1, 1},
-                    {6, 4, 3, 0, 2, 5, 3, 3, 1, 3, 3, 6, 1},
-                    {1, 5, 0, 1, 6, 6, 4, 1, 4, 3, 3, 6, 1}
-
-                    /*{1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0},
+                    {1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0},
                     {1, 1, 0, 1, 0, 0, 1, 1, 2, 0, 1},
                     {1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1},
-                    {0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1},*/
+                    {0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1},
             };
     private String[] terms;
 
@@ -233,14 +222,12 @@ public class DummyDocuments extends DocumentDummyGenerator
 
     @Override public String[] generateDocuments()
     {
-        final Random   random       = ThreadLocalRandom.current();
-        final String[] documents    = new String[this.getDocumentCount()];
-        final String[] terms        = this.generateTerms();
-        final int      maxTermCount = 200;
+        final String[] documents = new String[this.getDocumentCount()];
+        final String[] terms     = this.generateTerms();
 
         for(int i = -1, is = documents.length; ++i < is; )
         {
-            final List<String> rawDoc = new ArrayList<>(maxTermCount);
+            final List<String> rawDoc = new ArrayList<>();
             int                k      = -1;
             for(final int js : this.documents[i])
             {
@@ -249,11 +236,6 @@ public class DummyDocuments extends DocumentDummyGenerator
                 {
                     rawDoc.add(terms[k]);
                 }
-            }
-            Collections.shuffle(dictionary);
-            for(int j = rawDoc.size() - 1; ++j < maxTermCount; )
-            {
-                rawDoc.add(dictionary.get(random.nextInt(dictionary.size())));
             }
             for(int j = -1, js = 50; ++j < js; )
             {
