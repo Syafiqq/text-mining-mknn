@@ -60,7 +60,7 @@ import org.jetbrains.annotations.Nullable;
 
     public abstract void calculateTFIDF(@NotNull BagOfWords idf);
 
-    public abstract void calculateSimilarity(@NotNull Documents unclassified, @NotNull TermContainer terms);
+    public abstract void calculateSimilarity(@NotNull Documents document, @NotNull TermContainer terms);
 
     public abstract void orderSimilarity();
 
@@ -68,7 +68,9 @@ import org.jetbrains.annotations.Nullable;
 
     public abstract void calculateWeightVoting(int k);
 
-    public abstract void summarizeAndClassify(@NotNull List<Class> classes);
+    public abstract void summarize(@NotNull List<Class> classes);
+
+    public abstract void orderAndVote();
 
     @Override public String toString()
     {
