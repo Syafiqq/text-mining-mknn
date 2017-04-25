@@ -2,6 +2,8 @@ package case_0;
 
 import app.freelancer.syafiqq.text.classification.knn.core.Term;
 import java.util.Locale;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,6 +21,7 @@ public class StringTerm extends Term
     public StringTerm(@NotNull String term)
     {
         this.term = term.toLowerCase(new Locale("id", "ID", "ID"));
+        this.term = this.term.toLowerCase(Locale.US);
     }
 
     @NotNull public String getTerm()
@@ -31,9 +34,30 @@ public class StringTerm extends Term
         this.term = term;
     }
 
-    @Override public boolean equals(Object obj)
+    @Override public boolean equals(Object o)
     {
-        return obj instanceof StringTerm && this.term.contentEquals(((StringTerm) obj).term);
+        if(this == o)
+        {
+            return true;
+        }
+
+        if(!(o instanceof StringTerm))
+        {
+            return false;
+        }
+
+        StringTerm term1 = (StringTerm) o;
+
+        return new EqualsBuilder()
+                .append(getTerm(), term1.getTerm())
+                .isEquals();
+    }
+
+    @Override public int hashCode()
+    {
+        return new HashCodeBuilder(17, 37)
+                .append(getTerm())
+                .toHashCode();
     }
 
     @Override public String toString()
@@ -42,4 +66,5 @@ public class StringTerm extends Term
                 .append("term", term)
                 .toString();
     }
+
 }
