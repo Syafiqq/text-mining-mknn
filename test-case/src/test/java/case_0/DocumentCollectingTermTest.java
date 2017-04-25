@@ -1,14 +1,12 @@
 package case_0;
 
-import app.freelancer.syafiqq.text.classification.knn.core.KNN;
 import app.freelancer.syafiqq.text.dummy.generator.DocumentDummyGenerator;
 import case_0.clazz.IntegerClass;
 import case_0.document.DoubleBagOfWords;
-import case_0.document.IntBagOfWords;
 import case_0.document.Journal;
 import case_0.generator.DummyDocuments;
-import java.util.ArrayList;
-import java.util.List;
+import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -28,69 +26,33 @@ public class DocumentCollectingTermTest
         final String[]               documents = dummy.generateDocuments();
         final int[][]                termsMap  = dummy.generateTermsMap();
 
-/*        Arrays.stream(terms).forEach(System.out::println);
-        Arrays.stream(classified).forEach(System.out::println);
-        System.out.println(Arrays.deepToString(termsMap));*/
-
-        List<Journal> journals = new ArrayList<>(documents.length);
-        for(@NotNull final String document : documents)
-        {
-            journals.add(new Journal(null, new IntBagOfWords(), document));
-        }
-
-        final int          _CLASS_SIZE_ = 3;
-        List<IntegerClass> classes      = new ArrayList<>(_CLASS_SIZE_);
-
+        final int                                  _CLASS_SIZE_ = 3;
+        @NotNull final Int2ObjectMap<IntegerClass> classes      = new Int2ObjectLinkedOpenHashMap<>(_CLASS_SIZE_);
         for(int i = -1; ++i < _CLASS_SIZE_; )
         {
-            @NotNull final IntegerClass _clz = new IntegerClass(i + 1);
-            for(@NotNull final String _t : terms)
-            {
-                _clz.addTerm(new StringTerm(_t));
-            }
-            classes.add(_clz);
+            classes.put(i + 1, new IntegerClass(i + 1));
         }
 
-        journals.get(0).setClazz(classes.get(1));
-        journals.get(1).setClazz(classes.get(2));
-        journals.get(2).setClazz(classes.get(1));
-        journals.get(3).setClazz(classes.get(2));
-        journals.get(4).setClazz(classes.get(0));
-        journals.get(5).setClazz(classes.get(2));
-        journals.get(6).setClazz(classes.get(0));
+        Int2ObjectMap<Journal> journals = new Int2ObjectLinkedOpenHashMap<>(documents.length);
+        for(int i = -1; ++i < documents.length - 1; )
+        {
+            journals.put(i + 1, new Journal(documents[i], classes.get(1), new DoubleBagOfWords()));
+        }
 
-        //journals.forEach(System.out::println);
+        KNNImpl mknn = new KNNImpl();
+        mknn.getClassifiedDocument().addAll(journals.values());
+        mknn.getClasses().addAll(classes.values());
+        mknn.setTerms(new StringTermContainer());
+        mknn.setDFI(new DoubleBagOfWords());
+        mknn.setIDF(new DoubleBagOfWords());
+        mknn.setK(2);
 
-        KNN knn = new KNNImpl();
-        knn.addClassifiedDocument(journals.get(0));
-        knn.addClassifiedDocument(journals.get(1));
-        knn.addClassifiedDocument(journals.get(2));
-        knn.addClassifiedDocument(journals.get(3));
-        knn.addClassifiedDocument(journals.get(4));
-        knn.addClassifiedDocument(journals.get(5));
-        knn.addClassifiedDocument(journals.get(6));
-        knn.addUnclassifiedDocument(journals.get(7));
-        knn.getClasses().addAll(classes);
-        knn.setTerms(new StringTermContainer());
-        knn.setDFI(new IntBagOfWords());
-        knn.setIDF(new DoubleBagOfWords());
-        knn.setK(5);
+        Journal x = new Journal(documents[3], null, new DoubleBagOfWords());
 
-        knn.compile();
-        knn.collectTerms();
-        knn.cleaningDocument();
-        knn.calculateTFIDF();
-        knn.calculateValidity();
-        knn.calculateTest();
-        knn.getClasses().forEach(System.out::println);
-        System.out.println(journals.get(7));
+        mknn.train();
+        mknn.test(x);
 
-/*        System.out.println(knn.getDFI());
-        System.out.println(knn.getIDF());
-        System.out.println();
-
-        journals.forEach(journal -> System.out.println(journal.getTfIdf()));
-        System.out.println();*/
-        //journals.forEach(journal -> System.out.println(journal.getSimilarity()));
+        System.out.println(x.getClazz());
+        System.out.println(x.getClassified());
     }
 }
