@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-@SuppressWarnings({"SameParameterValue", "WeakerAccess", "unused", "ConstantConditions"}) public abstract class KNN
+@SuppressWarnings({"SameParameterValue", "WeakerAccess", "unused", "ConstantConditions", "UnusedReturnValue"}) public abstract class KNN
 {
     @NotNull protected  List<Documents> classified;
     @NotNull protected  List<Documents> unclassified;
@@ -37,7 +37,9 @@ import org.jetbrains.annotations.Nullable;
         this.classified.forEach(document -> unclassified.calculateSimilarity(document, this.terms));
         unclassified.orderSimilarity();
         unclassified.calculateWeightVoting(this.k);
-        unclassified.summarizeAndClassify(this.classes);
+        unclassified.summarize(this.classes);
+        unclassified.orderAndVote();
+        this.addUnclassifiedDocument(unclassified);
     }
 
     public void train()
@@ -61,7 +63,7 @@ import org.jetbrains.annotations.Nullable;
             System.exit(-1);
         }
 
-        if((this.k <= 0) && this.k >= (this.classified.size() - 1))
+        if((this.k <= 0) || this.k >= (this.classified.size()))
         {
             System.err.println("1 >= k <= train_size");
             System.exit(-1);
@@ -92,12 +94,17 @@ import org.jetbrains.annotations.Nullable;
             train.calculateValidity(this.k);
         });
     }
-    
+
     protected abstract void calculateIDF();
 
     public boolean addClassifiedDocument(@NotNull Documents documents)
     {
         return this.classified.add(documents);
+    }
+
+    public boolean addUnclassifiedDocument(@NotNull Documents documents)
+    {
+        return this.unclassified.add(documents);
     }
 
     public boolean addClass(@NotNull Class aClass)
