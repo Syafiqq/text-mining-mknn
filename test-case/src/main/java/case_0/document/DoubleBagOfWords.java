@@ -1,11 +1,11 @@
 package case_0.document;
 
 import app.freelancer.syafiqq.text.classification.knn.core.BagOfWords;
-import app.freelancer.syafiqq.text.classification.knn.core.Term;
+import app.freelancer.syafiqq.text.classification.knn.core.Documents;
 import app.freelancer.syafiqq.text.classification.knn.core.TermContainer;
 import case_0.StringTerm;
-import case_0.StringTermContainer;
 import it.unimi.dsi.fastutil.objects.Object2DoubleLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,46 +18,54 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DoubleBagOfWords extends BagOfWords
 {
-    @NotNull private Object2DoubleLinkedOpenHashMap<StringTerm> bow;
+    @NotNull private final Object2DoubleMap<StringTerm> bow;
 
     public DoubleBagOfWords()
     {
         this.bow = new Object2DoubleLinkedOpenHashMap<>();
     }
 
-    public double put(StringTerm stringTerm, double v)
-    {
-        return bow.put(stringTerm, v);
-    }
-
-    public double getDouble(StringTerm k)
-    {
-        return bow.getDouble(k);
-    }
-
-    public boolean containsKey(StringTerm k)
-    {
-        return bow.containsKey(k);
-    }
-
-    public Object2DoubleLinkedOpenHashMap<StringTerm> getBow()
-    {
-        return this.bow;
-    }
-
-    public void setBow(Object2DoubleLinkedOpenHashMap<StringTerm> bow)
-    {
-        this.bow = bow;
-    }
-
     @Override public void setTerms(@NotNull TermContainer terms)
     {
-        @NotNull final StringTermContainer _terms = (StringTermContainer) terms;
-        this.getBow().clear();
-        for(final Term term : _terms.getTerms())
+        @NotNull final Object2DoubleMap<StringTerm> _bow = this.getBow();
+        _bow.clear();
+        terms.getTerms().forEach(term -> _bow.put((StringTerm) term, 0));
+    }
+
+    @Override public void checkExistence(@NotNull Documents document)
+    {
+        ((DoubleBagOfWords) document.getBagOfWords()).getBow().forEach((term, count) ->
         {
-            this.put((StringTerm) term, 0);
-        }
+            if(count > 0)
+            {
+                this.increment(term);
+            }
+        });
+    }
+
+    public void increment(@NotNull StringTerm term)
+    {
+        this.put(term, this.getDouble(term) + 1);
+    }
+
+    public double put(StringTerm key, double value)
+    {
+        return bow.put(key, value);
+    }
+
+    public double getDouble(StringTerm key)
+    {
+        return bow.getDouble(key);
+    }
+
+    public boolean containsKey(StringTerm key)
+    {
+        return bow.containsKey(key);
+    }
+
+    @NotNull public Object2DoubleMap<StringTerm> getBow()
+    {
+        return this.bow;
     }
 
     @Override public String toString()
