@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
     @Nullable protected BagOfWords      DFI;
     @Nullable protected BagOfWords      IDF;
     protected           int             k;
+    private             double          accuracy;
 
     public KNN()
     {
@@ -93,6 +94,23 @@ import org.jetbrains.annotations.Nullable;
             train.orderSimilarity();
             train.calculateValidity(this.k);
         });
+
+        this.calculateAccuracy();
+    }
+
+    private void calculateAccuracy()
+    {
+        int tp = 0;
+        for(Documents document : this.classified)
+        {
+            this.test(document);
+            if(document.getClazz().equals(document.getClassified()))
+            {
+                ++tp;
+            }
+        }
+        this.getUnclassified().clear();
+        this.setAccuracy((double) tp / (double) this.classified.size());
     }
 
     protected abstract void calculateIDF();
@@ -180,6 +198,16 @@ import org.jetbrains.annotations.Nullable;
     public void setK(int k)
     {
         this.k = k;
+    }
+
+    public double getAccuracy()
+    {
+        return this.accuracy;
+    }
+
+    public void setAccuracy(double accuracy)
+    {
+        this.accuracy = accuracy;
     }
 
     @SuppressWarnings("StringBufferReplaceableByString") @Override public String toString()
