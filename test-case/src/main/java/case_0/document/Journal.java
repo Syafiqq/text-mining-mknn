@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-public class Journal extends Documents
+@SuppressWarnings("Duplicates") public class Journal extends Documents
 {
     @NotNull private final static Locale ID_LOCALE = new Locale("id", "ID", "ID");
 
