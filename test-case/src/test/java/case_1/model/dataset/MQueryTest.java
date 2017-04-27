@@ -23,6 +23,6 @@ public class MQueryTest
         @NotNull final MQuery query3 = new MQuery("Query 1", new MClass("Kelas 1"));
         Assert.assertEquals("Kelas 1", query3.getClazz().getName());
         Assert.assertEquals("Query 1", query3.getQuery());
-        Assert.assertEquals(false, query2.equals(query3));
+        Assert.assertEquals(true, query2.equals(query3));
     }
 }
