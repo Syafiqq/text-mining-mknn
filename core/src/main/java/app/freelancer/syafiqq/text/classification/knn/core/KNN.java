@@ -2,6 +2,7 @@ package app.freelancer.syafiqq.text.classification.knn.core;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,6 +71,8 @@ import org.jetbrains.annotations.Nullable;
             System.exit(-1);
         }
 
+        this.terms.getTerms().clear();
+
         //===Cleaning===
         this.classified.forEach(documents ->
         {
@@ -100,17 +103,17 @@ import org.jetbrains.annotations.Nullable;
 
     private void calculateAccuracy()
     {
-        int tp = 0;
-        for(Documents document : this.classified)
+        @NotNull final AtomicInteger tp = new AtomicInteger(0);
+        this.classified.forEach(document ->
         {
             this.test(document);
             if(document.getClazz().equals(document.getClassified()))
             {
-                ++tp;
+                tp.incrementAndGet();
             }
-        }
+        });
         this.getUnclassified().clear();
-        this.setAccuracy((double) tp / (double) this.classified.size());
+        this.setAccuracy((double) tp.get() / (double) this.classified.size());
     }
 
     protected abstract void calculateIDF();
