@@ -1,0 +1,38 @@
+group 'app.freelancer.syafiqq.classification'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    // https://mvnrepository.com/artifact/org.apache.lucene/lucene-core
+    compile group: 'org.apache.lucene', name: 'lucene-core', version: '6.5.0'
+    // https://mvnrepository.com/artifact/org.apache.lucene/lucene-analyzers-common
+    compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '6.5.0'
+    // https://mvnrepository.com/artifact/org.apache.lucene/lucene-queryparser
+    compile group: 'org.apache.lucene', name: 'lucene-queryparser', version: '6.5.0'
+    // https://mvnrepository.com/artifact/org.apache.lucene/lucene-queries
+    compile group: 'org.apache.lucene', name: 'lucene-queries', version: '6.5.0'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-math3
+    compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
+    compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.1'
+    // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
+    compile group: 'it.unimi.dsi', name: 'fastutil', version: '7.1.0'
+    // https://mvnrepository.com/artifact/org.jetbrains/annotations
+    compile group: 'org.jetbrains', name: 'annotations', version: '15.0'
+    // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.16.1'
+    // https://mvnrepository.com/artifact/org.swinglabs/swingx
+    compile group: 'org.swinglabs', name: 'swingx', version: '1.6.1'
+
+    compile project(':core')
+}
