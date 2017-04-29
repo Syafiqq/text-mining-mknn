@@ -211,6 +211,8 @@ import org.jetbrains.annotations.Nullable;
         tokenStream = new IndonesianStemFilter(tokenStream);
         tokenStream = new PorterStemFilter(tokenStream);
 
+        this.tokenize.clear();
+
         try
         {
             tokenStream.reset();
