@@ -9,6 +9,10 @@ repositories {
     mavenCentral()
 }
 
+test {
+    exclude 'main/Main.class'
+}
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     // https://mvnrepository.com/artifact/org.apache.lucene/lucene-core
