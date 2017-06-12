@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "6.0.0.0.84" Java: "1.8.0_112-release" encoding: "UTF-8"
+JFDML JFormDesigner: "6.0.1.0.112" Java: "1.8.0_112-release" encoding: "UTF-8"
 
 new FormModel {
 	"i18n.autoExternalize": true
@@ -32,7 +32,8 @@ new FormModel {
 						add( new FormComponent( "javax.swing.JLabel" ) {
 							name: "lAccuracy"
 							"text": "Akurasi : 0%"
-							"font": new java.awt.Font( "Dialog", 0, 30 )
+							"font": &Font0 new java.awt.Font( "Dialog", 0, 30 )
+							"visible": false
 						}, new FormLayoutConstraints( class java.lang.String ) {
 							"value": "East"
 						} )
@@ -81,8 +82,61 @@ new FormModel {
 					} )
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 						name: "panel5"
-						"minimumSize": new java.awt.Dimension( 68, 36 )
-						"preferredSize": new java.awt.Dimension( 68, 36 )
+						"minimumSize": new java.awt.Dimension( 68, 80 )
+						"preferredSize": new java.awt.Dimension( 68, 80 )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) {
+							"hgap": 5
+							"vgap": 5
+						} ) {
+							name: "panel6"
+							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.swingx.HorizontalLayout ) {
+								"gap": 20
+							} ) {
+								name: "panel7"
+								add( new FormComponent( "javax.swing.JButton" ) {
+									name: "button5"
+									"text": "Uji Data Latih"
+									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "onTestTrainingDataPressed", true ) )
+								} )
+								add( new FormComponent( "javax.swing.JButton" ) {
+									name: "button4"
+									"text": "Uji Dari Dokumen"
+									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "onExternalDataTesting", true ) )
+								} )
+								add( new FormComponent( "javax.swing.JButton" ) {
+									name: "button6"
+									"text": "Hapus Pengujian"
+									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "onTestingButtonPressed", true ) )
+								} )
+							}, new FormLayoutConstraints( class java.lang.String ) {
+								"value": "West"
+							} )
+							add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
+								name: "hSpacer1"
+							}, new FormLayoutConstraints( class java.lang.String ) {
+								"value": "Center"
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "lAccuracy2"
+								"text": "Akurasi : 0%"
+								"font": #Font0
+							}, new FormLayoutConstraints( class java.lang.String ) {
+								"value": "East"
+							} )
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "North"
+						} )
+						add( new FormComponent( "javax.swing.JComboBox" ) {
+							name: "comboBox1"
+							"model": new javax.swing.DefaultComboBoxModel {
+								selectedItem: "Tidak Tahu"
+								addElement( "Tidak Tahu" )
+								addElement( "Positive" )
+								addElement( "Negative" )
+							}
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "West"
+						} )
 						add( new FormComponent( "javax.swing.JTextField" ) {
 							name: "testField"
 						}, new FormLayoutConstraints( class java.lang.String ) {
