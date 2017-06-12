@@ -8,6 +8,45 @@ allprojects {
         maven {
             url "https://repo1.maven.org/maven2"
         }
+        maven { url 'https://jitpack.io' }
     }
 }
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+
+    sourceCompatibility = 1.8 // java 8
+    targetCompatibility = 1.8
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    artifacts {
+        archives sourcesJar
+        archives javadocJar
+    }
+
+    install {
+        repositories.mavenInstaller {
+            pom.project {
+                licenses {
+                    license {
+                        name 'MIT License'
+                        url 'https://raw.githubusercontent.com/Syafiqq/text-mining-mknn/master/license'
+                        distribution 'repo'
+                    }
+                }
+            }
+        }
+    }
+}
+
 
