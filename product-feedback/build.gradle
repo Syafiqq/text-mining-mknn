@@ -39,5 +39,6 @@ dependencies {
     compile group: 'org.swinglabs', name: 'swingx', version: '1.6.1'
     // https://mvnrepository.com/artifact/com.opencsv/opencsv
     compile group: 'com.opencsv', name: 'opencsv', version: '3.9'
-    compile project(':core')
+
+    compile 'com.github.Syafiqq.text-mining-mknn:product-feedback:1.0.1'
 }
