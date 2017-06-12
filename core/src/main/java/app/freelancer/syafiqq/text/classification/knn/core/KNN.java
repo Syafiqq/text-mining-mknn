@@ -15,14 +15,14 @@ import org.jetbrains.annotations.Nullable;
  */
 @SuppressWarnings({"SameParameterValue", "WeakerAccess", "unused", "ConstantConditions", "UnusedReturnValue"}) public abstract class KNN
 {
-    @NotNull protected  List<Documents> classified;
-    @NotNull protected  List<Documents> unclassified;
-    @NotNull protected  List<Class>     classes;
-    @Nullable protected TermContainer   terms;
-    @Nullable protected BagOfWords      DFI;
-    @Nullable protected BagOfWords      IDF;
-    protected           int             k;
-    private             double          accuracy;
+    @NotNull protected List<Documents> classified;
+    @NotNull protected List<Documents> unclassified;
+    @NotNull protected List<Class> classes;
+    @Nullable protected TermContainer terms;
+    @Nullable protected BagOfWords DFI;
+    @Nullable protected BagOfWords IDF;
+    protected int k;
+    protected double accuracy;
 
     public KNN()
     {
@@ -101,7 +101,7 @@ import org.jetbrains.annotations.Nullable;
         this.calculateAccuracy();
     }
 
-    private void calculateAccuracy()
+    protected void calculateAccuracy()
     {
         @NotNull final AtomicInteger tp = new AtomicInteger(0);
         this.classified.forEach(document ->
