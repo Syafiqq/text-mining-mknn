@@ -143,7 +143,7 @@ import org.jetbrains.annotations.Nullable;
         this.tokenize();
     }
 
-    private void cleaning()
+    public void cleaning()
     {
         this.cleanedDocument = this.documents.getQuery();
 
@@ -194,9 +194,10 @@ import org.jetbrains.annotations.Nullable;
         // Escape HTML
         this.cleanedDocument = this.cleanedDocument.replaceAll("&amp;", "&");
         this.cleanedDocument = StringEscapeUtils.unescapeHtml4(this.cleanedDocument);
+
     }
 
-    private void tokenize()
+    public void tokenize()
     {
         @NotNull final Analyzer          analyzer    = new WhitespaceAnalyzer();
         @NotNull TokenStream             tokenStream = analyzer.tokenStream("contents", new StringReader(this.cleanedDocument));
@@ -205,7 +206,7 @@ import org.jetbrains.annotations.Nullable;
         if(INDONESIA_STOP_WORDS != null)
         {
             tokenStream = new StopFilter(tokenStream, INDONESIA_STOP_WORDS);
-            tokenStream = new StopFilter(tokenStream, ENGLISH_STOP_WORDS);
+            //tokenStream = new StopFilter(tokenStream, ENGLISH_STOP_WORDS);
         }
 
         tokenStream = new IndonesianStemFilter(tokenStream);
@@ -218,7 +219,7 @@ import org.jetbrains.annotations.Nullable;
             while(tokenStream.incrementToken())
             {
                 @NotNull final String _term = term.toString();
-                if(INDONESIA_VOCAB.contains(_term) || ENGLISH_VOCAB.contains(_term))
+                if(INDONESIA_VOCAB.contains(_term) /*|| ENGLISH_VOCAB.contains(_term)*/)
                 {
                     this.tokenize.add(new TermImpl(_term));
                 }
