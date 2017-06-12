@@ -37,6 +37,7 @@ dependencies {
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.16.1'
     // https://mvnrepository.com/artifact/org.swinglabs/swingx
     compile group: 'org.swinglabs', name: 'swingx', version: '1.6.1'
-
+    // https://mvnrepository.com/artifact/com.opencsv/opencsv
+    compile group: 'com.opencsv', name: 'opencsv', version: '3.9'
     compile project(':core')
 }
